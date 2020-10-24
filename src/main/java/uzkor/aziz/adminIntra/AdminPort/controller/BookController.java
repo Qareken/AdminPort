@@ -1,10 +1,12 @@
 package uzkor.aziz.adminIntra.AdminPort.controller;
 
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileUrlResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uzkor.aziz.adminIntra.AdminPort.domain.Book;
@@ -20,9 +23,16 @@ import uzkor.aziz.adminIntra.AdminPort.domain.NewsFiles;
 import uzkor.aziz.adminIntra.AdminPort.service.BookService;
 
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +40,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/book")
 public class BookController {
+
     @Value("${upload.folder}")
     private String uploadFolder;
     @Autowired
@@ -41,8 +52,6 @@ public class BookController {
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     public String addBook(Model model){
         model.addAttribute("book",new Book());
-
-
         return "addBook";
     }
 
@@ -50,7 +59,6 @@ public class BookController {
     public String saveBook(@ModelAttribute Book book, @RequestParam("file") MultipartFile multipartFile, Model model){
         Book dbBook=bookService.save(book, multipartFile);
         if(dbBook!=null){
-
             return "redirect:bookList";
         }else{
 
@@ -66,14 +74,16 @@ public class BookController {
 
         return "bookList";
     }
+
+    @CrossOrigin
     @RequestMapping(value = "/bookInfo/{id}", method = RequestMethod.GET)
     public String bookInfo(@PathVariable Long id, Model model)throws IOException {
-        System.out.println(uploadFolder);
         Book book=bookService.findById(id);
         model.addAttribute("path", uploadFolder);
         model.addAttribute("books", book);
         return "bookInfo";
     }
+
     @GetMapping("/preview/{hashId}")
     public ResponseEntity previewFile(@PathVariable Long id) throws IOException {
         Book fileStorage=bookService.findById(id);

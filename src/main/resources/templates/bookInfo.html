@@ -4,6 +4,7 @@
 
 </head>
     <body>
+
         <div th:replace="common/header :: navbar"></div>
             <div class="container">
                 <div>
@@ -16,13 +17,12 @@
 
                     </ol>
                 </div>
-
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <span>
-                                    <img th:src="@{${path}+${books.image_path}}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${books.image_extension!='pdf'and books.image_extension!='xls' and books.image_extension!='xlsx'}"/>
+                                    <img th:src="@{'/' + ${books.getImage_path()}}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${books.image_extension!='pdf'and books.image_extension!='xls' and books.image_extension!='xlsx'}"/>
                                     <img th:src="@{'/image/pdfImage.png'}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${books.image_extension=='pdf'}"/>
                                     <img th:src="@{'/image/excelImage.jpg'}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${books.image_extension=='xls'or books.image_extension=='xlsx'}"/>
 
