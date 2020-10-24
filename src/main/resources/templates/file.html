@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Editing</title>
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="custom.css">
+</head>
+<body>
+	
+	<div class="container">
+		<h2 style="margin-bottom: 20px;">Редактирование</h2>
+
+		<div class="row">
+			<div class="col-md-6">
+				<form>
+				  <div class="form-group">
+				    <label for="fieldTitle">Title</label>
+				    <input type="text" class="form-control" id="fieldTitle">
+				  </div>
+				  <div class="form-group">
+				    <label for="fieldTitle2">Title 2</label>
+				    <input type="text" class="form-control" id="fieldTitle2">
+				  </div>
+				  <div class="form-group">
+				    <label for="fieldDesc">Description</label>
+				    <textarea class="form-control" id="fieldDesc" rows="6"></textarea>
+				  </div>
+				  <button type="reset" class="btn btn-info">Reset</button>
+				  <button type="submit" class="btn btn-success">Save</button>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<h4>Images</h4>
+				<div class="images-container">
+					<div class="images-list" data-list="1,2,3,4,5,6">
+						<p class="placeholder">No images...</p>
+
+						<div class="image-ob" data-image="1">
+							<div class="image-obcol">
+								<img src="images/1.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="1" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+
+						<div class="image-ob" data-image="2">
+							<div class="image-obcol">
+								<img src="images/2.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="2" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+
+						<div class="image-ob" data-image="3">
+							<div class="image-obcol">
+								<img src="images/3.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="3" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+
+						<div class="image-ob" data-image="4">
+							<div class="image-obcol">
+								<img src="images/4.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="4" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+
+						<div class="image-ob" data-image="5">
+							<div class="image-obcol">
+								<img src="images/5.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="5" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+
+						<div class="image-ob" data-image="6">
+							<div class="image-obcol">
+								<img src="images/6.jpg">
+							</div>
+							<button type="button" class="btn btn-danger remove-image" data-image="6" title="удалить">
+								<img src="trash.ico" alt="trash">
+							</button>
+						</div>
+					</div>
+					<div class="action">
+						<button id="remove-all" type="submit" class="btn btn-danger">Remove All</button>
+						<button type="submit" class="btn btn-primary">Add image</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<script src="jquery.min.js"></script>
+	<script src="bootstrap.bundle.min.js"></script>
+	<script>
+
+		$(function() {
+			let imgElementList = $('.images-list');
+			let imgSourceArr = (imgElementList && imgElementList.length) ? imgElementList.attr('data-list').split(",") : [];
+			let imgRemoveBtnList = $('.remove-image');
+			let imgRemoveAllBtn = $('#remove-all');
+			let placeholderEl = $(".placeholder");
+
+			console.log(imgSourceArr);
+
+
+			// hide images container placeholder text
+			placeholderEl.hide();
+
+
+			// on click one of btn inside image block
+			imgRemoveBtnList.click(function(e) {
+				e.preventDefault();
+
+				remove($(this).attr('data-image'));
+
+				if (imgSourceArr.length == 0) {
+					placeholderEl.show();
+				}
+
+				console.log(imgSourceArr);
+			});
+
+
+
+			// on click remove all btn
+			imgRemoveAllBtn.click(function(e) {
+				e.preventDefault();
+
+				removeAll();
+
+				console.log(imgSourceArr);
+			});
+
+
+
+			function remove(imgDataAttr) {
+				if (imgDataAttr) {
+					// remove from array
+					let index = imgSourceArr.indexOf(imgDataAttr);
+					imgSourceArr.splice(index, 1);
+
+					// remove from html page
+					imgElementList.find(".image-ob").each(function() {
+						if ($(this).attr('data-image') === imgDataAttr) {
+							$(this).remove();
+						}
+					});
+				}
+			}
+
+			function removeAll() {
+				// remove image block elements
+				imgElementList.find(".image-ob").remove();
+
+				// clear array
+				imgSourceArr = [];
+
+				// show placeholder element
+				placeholderEl.show();
+			}
+		});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1000/xthml">
+<head th:replace="common/header::common-header"/>
+<style>
+    .images-container{
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+    }
+    .overlay{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0;
+        width: 100%;
+        opacity: 0;
+        transition: .3s ease;
+        border-radius: 50%;
+    }
+    .images-container:hover .overlay{
+        opacity: 1;
+    }
+    .icon{
+        color: white;
+        font-size: 40px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    .fa-trash:hover{
+        color: red;
+    }
+</style>
+<body>
+<div th:replace="common/header::navbar"/>
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" th:action="@{/news/updateNews}" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend class="center-block">Update File information</legend><span style="font-size: small">*is a required field</span>
+                <div class="form-group">
+                    <label for="name">Title</label>
+                    <input type="text" class="form-control" id="name"  th:field="${news.name}" required="required" placeholder="Name"/>
+                    <span class="help-block">Title of the news</span>
+                </div>
+                <input hidden="hidden" name="id" th:value="${news.id}">
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label" for="category">* Division</label>
+                    <div class="col-xs-8">
+                        <select th:value="${news.category}" id="category" name ="category" class="form-control">
+                            <option value="" selected="selected" disabled="disabled">Please select option...</option>
+                            <option value="IT" th:selected="(${news.category}=='IT')">IT and Telecommunication</option>
+                            <option value="Instrumentation"th:selected="(${news.category}=='Instrumentation')">Instrumentation Division</option>
+                            <option value="Electrical"th:selected="(${news.category}=='Electrical')">Electrical Division</option>
+                            <option value="Mechanic"th:selected="(${news.category}=='Mechanic')">Mechanic Division</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-md-3 control-label" for="description">Description</label>
+                    <div class="col-md-7">
+                                    <textarea  class="form-control" id="description" rows="5"
+                                               name="description" placeholder="Description"
+                                               th:value="${news.description}" required="required">
+                                    </textarea>
+                        <span class="help-block">Description of the File</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-md-3 control-label" for="file">Upload Image file</label>
+                    <div class="col-md-7">
+                        <input type="file" id="file" name="Data" class="file-input" th:field="${news.files}"   />
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-7">
+                        <button type="submit"  class="btn btn-success">Update File</button>
+                        <a class="btn btn-danger" th:href="@{'/news/newsInfo/'+${news.id}}">Cancel</a>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="form-group">
+    <span th:each="files, itrStat:${newsFiles}" class="images-container" th:id="'imageindex'+${itrStat.index}">
+        <img th:src="@{'/newses/'+${files.modifiedName}}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension!='pdf'and files.fileExtension!='xls' and files.fileExtension!='xlsx'}"/>
+        <img th:src="@{'/image/pdfImage.png'}" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension=='pdf'}"/>
+        <img th:src="@{'/image/excelImage.jpg'}" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension=='xls'or files.fileExtension=='xlsx'}"/>
+        <span class="overlay">
+            <button type="button" class="btn btn-danger image-confirm-delete"  title="image delete" th:attr="data-id=${itrStat.index}, data-name=${files.modifiedName}">
+                <img th:src="@{'/image/trash.png'}" alt="trash">
+            </button>
+
+        </span>
+    </span>
+</div>
+<input type="hidden" class="form-control" th:field="${news.removeImages}" id="removeImages">
+<input type="hidden" class="form-control" th:field="${news.id}" >
+<div th:replace="common/header::body-bottom-scripts"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootsrap.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    var images=[];
+    $('.image-confirm-delete').on('click', function (e) {
+        e.preventDefault();
+        var id=$(this).data('id');
+        var name=$(this).data('name');
+        images.push(name);
+        $('#removeImages').val(images);
+        $('#imageindex'+id).hide();
+    });
+});
+
+</script>
+
+</body>
+</html>

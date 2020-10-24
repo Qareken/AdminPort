@@ -1,0 +1,49 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: common-header" >
+
+</head>
+    <body>
+        <div th:replace="common/header :: navbar"></div>
+            <div class="container">
+                <div>
+                    <ol class="breadcrumb">
+
+                            <li><a th:href="@{/news/newsList}"><i class="fas fa-long-arrow-left"></i>Go back</a></li>
+
+                            <li ><a th:href="@{'/news/updateNews/'+${news.id}}">Edit</a></li>
+
+
+                    </ol>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <span th:each="files, itrStat:${newsFiles}" class="imagecontainer" th:id="'imageindex'+${itrStat.index}">
+                                    <img th:src="@{'/news/'+${files.modifiedName}}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension!='pdf'and files.fileExtension!='xls' and files.fileExtension!='xlsx'}"/>
+                                    <img th:src="@{'/image/pdfImage.png'}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension=='pdf'}"/>
+                                    <img th:src="@{'/image/excelImage.jpg'}" style="width: 80px; height: 80px; border-radius:50%; margin-left: 10px" class="img-responsive" th:if="${files.fileExtension=='xls'or files.fileExtension=='xlsx'}"/>
+
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" th:text="${isAdd}?'Save':'Update'"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                        <h3 th:text="${news.name}"></h3>
+                        <div class="row">
+                            <p><strong>Division:</strong><span th:text="${news.category}"></span></p>
+                        </div>
+                    </div>
+                    <p><strong>Description:</strong><span th:utext="${news.description}"></span></p>
+                </div>
+            </div>
+        <div th:replace="common/header :: body-bottom-scripts"></div>
+
+    </body>
+</html>

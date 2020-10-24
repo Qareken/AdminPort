@@ -1,0 +1,51 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="common/header :: common-header" />
+
+    <body>
+    <div th:replace="common/header :: navbar"></div>
+
+    <h1>Book List page</h1>
+    <div class="container">
+        <div class="table-responsive">
+            <table id="bookListTable" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Division</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-th-each="book:${bookList}">
+                     <!--   <td><input hidden="hidden" name="id"th:value="${book.id}"/></td>-->
+                        <td><a th:href="@{'/book/bookInfo/'+${book.id}}"><span th:text="${book.name}"></span></a> </td>
+
+                        <td th:text="${book.category}"></td>
+                        <td> <button type="submit" class="btn btn-danger" th:href="@{'/book/delete/'+${book.id}}">delete</button> </td>
+
+
+                    </tr>
+                </tbody>
+
+                </thead>
+
+            </table>
+
+        </div>
+    </div>
+
+
+    <div th:replace="common/header :: body-bottom-scripts"></div>
+    <script>
+        $(document).ready(function () {
+            $("#bookListTable").DataTable({
+                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                "ordering":false,
+                stateSave:true
+            });
+        });
+    </script>
+    </body>
+</html>

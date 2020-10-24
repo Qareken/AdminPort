@@ -1,0 +1,47 @@
+.images-container {
+	display: block;
+	width: 100%;
+	margin-top: 10px;
+}
+.images-container .images-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	min-height: 40px;
+	margin-bottom: 10px;
+	padding: 10px 10px 10px 10px;
+	border: 2px solid #dedede;
+	border-radius: 4px;
+}
+.images-list .image-ob {
+	position: relative;
+	flex-shrink: 0;
+	display: block;
+	width: 160px;
+	height: 140px;
+	padding: 5px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.image-ob .image-obcol {
+	display: block;
+	width: 100%;
+}
+.image-ob .image-obcol img {
+	width: 100%;
+}
+
+.image-ob .remove-image {
+	display: block;
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+}
+.image-ob .remove-image img {
+	width: 24px;
+}
